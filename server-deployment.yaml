@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-agent-deployment
+spec:
+  progressDeadlineSeconds: 180
+  replicas: 5
+  selector:
+    matchLabels:
+      app: dev-agent
+  template:
+    metadata:
+      labels:
+        app: dev-agent
+    spec:
+      containers:
+      - name: dev-agent-container
+        image: dev-agent:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: file-mount
+          mountPath: /data
+      volumes:
+      - name: file-mount
+        persistentVolumeClaim:
+          claimName: file-write-pvc
+      restartPolicy: Always
