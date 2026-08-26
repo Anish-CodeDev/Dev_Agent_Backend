@@ -24,6 +24,8 @@ const (
 type ExecuteCommandsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Cmds          []string               `protobuf:"bytes,1,rep,name=cmds,proto3" json:"cmds,omitempty"`
+	AppName       string                 `protobuf:"bytes,2,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"`
+	LoadFromFile  bool                   `protobuf:"varint,3,opt,name=load_from_file,json=loadFromFile,proto3" json:"load_from_file,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -63,6 +65,20 @@ func (x *ExecuteCommandsRequest) GetCmds() []string {
 		return x.Cmds
 	}
 	return nil
+}
+
+func (x *ExecuteCommandsRequest) GetAppName() string {
+	if x != nil {
+		return x.AppName
+	}
+	return ""
+}
+
+func (x *ExecuteCommandsRequest) GetLoadFromFile() bool {
+	if x != nil {
+		return x.LoadFromFile
+	}
+	return false
 }
 
 type ExecuteCommandsResponse struct {
@@ -305,9 +321,11 @@ var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
 	"\n" +
-	"\fconfig.proto\",\n" +
+	"\fconfig.proto\"m\n" +
 	"\x16ExecuteCommandsRequest\x12\x12\n" +
-	"\x04cmds\x18\x01 \x03(\tR\x04cmds\"1\n" +
+	"\x04cmds\x18\x01 \x03(\tR\x04cmds\x12\x19\n" +
+	"\bapp_name\x18\x02 \x01(\tR\aappName\x12$\n" +
+	"\x0eload_from_file\x18\x03 \x01(\bR\floadFromFile\"1\n" +
 	"\x17ExecuteCommandsResponse\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\"`\n" +
 	"\x11CreateFileRequest\x12\x14\n" +

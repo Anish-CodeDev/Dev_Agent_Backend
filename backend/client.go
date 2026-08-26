@@ -20,6 +20,8 @@ type requestBody struct{
 }
 type commandBody struct{
 	Cmd []string `json:"commands"`
+	AppName string `json:"app_name"`
+	LoadCommands bool `json:"load_from_file"`
 }
 
 type folder_path struct{
@@ -103,6 +105,8 @@ func (s *httpServer) Run() error {
 		defer cancel()
 		res,err := c.ExecuteCommands(ctx,&agent.ExecuteCommandsRequest{
 			Cmds:  cmd.Cmd,
+			AppName: cmd.AppName,
+			LoadFromFile: cmd.LoadCommands,
 		})
 		if err!=nil{
 			http.Error(w, "Request failed: "+err.Error(), http.StatusInternalServerError)

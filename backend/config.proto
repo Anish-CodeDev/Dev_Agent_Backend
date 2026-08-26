@@ -9,6 +9,8 @@ service ManageAgentOps{
 
 message ExecuteCommandsRequest{
      repeated string cmds= 1;
+     string app_name = 2;
+     bool load_from_file = 3;
 }
 message ExecuteCommandsResponse{
     string status= 1;

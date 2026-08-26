@@ -2,20 +2,48 @@ package services
 
 import (
 	agent "agentops/common"
+	"bufio"
 	"context"
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
+
 	"github.com/mattn/go-shellwords"
 )
 
 func runCommand(command string) (string, error) {
+	if command == "" || strings.HasPrefix(command,"#"){
+		return "Not Executed",nil
+	}
 	args, err := shellwords.Parse(command)
 	cmd := exec.Command(args[0], args[1:]...)
 	output, err := cmd.CombinedOutput()
-	return string(output), err
+	return string(output),err
 }
 
+func installFromFile(path string)(error){
+	file,err:= os.Open(path)
+	if err!=nil{
+		return err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan(){
+		line:=strings.TrimSpace(scanner.Text())
+		out,err:= runCommand(line)
+		if err!=nil{
+			fmt.Println("Output: ",out)
+			return err
+		}
+	}
+	if err:=scanner.Err();err!=nil{
+		return err
+	}
+	return nil
+}
 type AgentService struct {
 }
 
@@ -27,18 +55,35 @@ func (s *AgentService) ExecuteCommands(ctx context.Context, in *agent.ExecuteCom
 	if err:= os.Mkdir("/data",0755);err!=nil{
 		fmt.Println("Directory already exists")
 	}
-	res:=fmt.Sprintf("/data/%v","test")
+	res:=fmt.Sprintf("/data/%v",in.AppName)
 	if err:=os.Mkdir(res,0755);err!=nil{
 		fmt.Println("Directory already exists")
 	}
+	
+	if(in.LoadFromFile){
+		err:= installFromFile(res + "/commands.txt")
+		return err
+	}
+	f, err := os.OpenFile(res+"/commands.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+			return err
+	}
+	defer f.Close()
 	for _,cmd:= range in.Cmds{
 		cmd += "\n"
 		data:= []byte(cmd)
-		err:=os.WriteFile(res + "/commands.txt",data,0755)
-		if err!=nil{
+		
+		
+		output, err:= runCommand(cmd)
+		
+		if _,err:= f.Write(data);err!=nil{
 			return err
 		}
-
+		
+		if err!=nil{
+			fmt.Println("Error: ",output)
+			return err
+		}
 	}
 	return nil
 }
