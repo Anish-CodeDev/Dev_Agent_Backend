@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
     -o /app/out/server ./agentservice/
 
 # Runtime stage
-FROM gcr.io/distroless/static-debian12
+FROM nikolaik/python-nodejs:python3.14-nodejs26
 
 WORKDIR /app
 COPY --from=builder /app/out .
