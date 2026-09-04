@@ -13,6 +13,7 @@ spec:
       labels:
         app: dev-agent
     spec:
+      runtimeClassName: gvisor
       containers:
       - name: dev-agent-container
         image: dev-agent:latest
