@@ -232,6 +232,7 @@ func (x *CreateFileResponse) GetStatus() string {
 type ViewFileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	AppName       string                 `protobuf:"bytes,2,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -269,6 +270,13 @@ func (*ViewFileRequest) Descriptor() ([]byte, []int) {
 func (x *ViewFileRequest) GetPath() string {
 	if x != nil {
 		return x.Path
+	}
+	return ""
+}
+
+func (x *ViewFileRequest) GetAppName() string {
+	if x != nil {
+		return x.AppName
 	}
 	return ""
 }
@@ -333,9 +341,10 @@ const file_config_proto_rawDesc = "" +
 	"\bcontents\x18\x02 \x03(\tR\bcontents\x12\x19\n" +
 	"\bapp_name\x18\x03 \x01(\tR\aappName\",\n" +
 	"\x12CreateFileResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\tR\x06status\"%\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status\"@\n" +
 	"\x0fViewFileRequest\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"&\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x19\n" +
+	"\bapp_name\x18\x02 \x01(\tR\aappName\"&\n" +
 	"\x10ViewFileResponse\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code2\xbf\x01\n" +
 	"\x0eManageAgentOps\x12D\n" +

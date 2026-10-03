@@ -115,7 +115,7 @@ func (s *AgentService) CreateFiles(ctx context.Context, in *agent.CreateFileRequ
 
 func(s *AgentService) ViewFiles(ctx context.Context, in *agent.ViewFileRequest)(error,string){
 fmt.Println("User wants to access the file located at ",in.Path);
-data,err := os.ReadFile(fmt.Sprintf("/data/%s",in.Path))
+data,err := os.ReadFile(fmt.Sprintf("/data/%s/%s",in.AppName,in.Path))
 if err!=nil{
 	return nil,"Failed";
 }

@@ -25,6 +25,7 @@ message CreateFileResponse{
 }
 message ViewFileRequest{
     string path = 1;
+    string app_name = 2;
 }
 
 message ViewFileResponse{
