@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-
+	"path/filepath"
 	"github.com/mattn/go-shellwords"
 )
 
@@ -43,6 +43,10 @@ func installFromFile(path string)(error){
 		return err
 	}
 	return nil
+}
+func hasFolder(p string)(bool){
+	dir:=filepath.Dir(p)
+	return dir!="." && dir!=string(filepath.Separator)
 }
 type AgentService struct {
 }
@@ -89,6 +93,7 @@ func (s *AgentService) ExecuteCommands(ctx context.Context, in *agent.ExecuteCom
 }
 
 func (s *AgentService) CreateFiles(ctx context.Context, in *agent.CreateFileRequest) error {
+
 	file_names := []string{}
 	for _, val := range in.Files {
 		file_names = append(file_names, val)
@@ -103,6 +108,11 @@ func (s *AgentService) CreateFiles(ctx context.Context, in *agent.CreateFileRequ
 	for i, val := range in.Contents {
 		data := []byte(val)
 		file_name := fmt.Sprintf("/data/%v/%v", in.AppName, file_names[i])
+		if(hasFolder(file_name)){
+			if err:= os.Mkdir(filepath.Dir(file_name),0755); err!=nil{
+				fmt.Println("Directory already exists...")
+			}
+		}
 		err := os.WriteFile(file_name, data, 0644)
 		if err != nil {
 			return err
