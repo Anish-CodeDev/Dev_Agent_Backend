@@ -33,6 +33,7 @@ func (h *AgentHandler) CreateFiles(ctx context.Context,in *agent.CreateFileReque
 func (h *AgentHandler) ViewFile(ctx context.Context,in *agent.ViewFileRequest)(*agent.ViewFileResponse,error){
 	err,code:= h.service.ViewFiles(ctx,&agent.ViewFileRequest{
 		Path: in.Path,
+		AppName: in.AppName,
 	})
 	if err!=nil{
 		return nil,err
